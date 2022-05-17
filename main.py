@@ -1,17 +1,6 @@
-import discord
-
-client = discord.Client()
-
-# Member
-def has_role(member,target):
-    for role in member.roles:
-        if role.name==target.name:
-            return True
-    return False
-
-
-def is_member_voter(member):
-    return has_role(member, {'name': 'Voter'})
+from utils import client
+import auth
+import data
 
 
 @client.event
@@ -20,8 +9,9 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if is_member_voter(message.author):
-        await message.channel.send('has role')
+    if message.author.bot:
+        return
+    member_instance = data.get_member(message.guild, message.author)
 
-token = "OTU0OTc3MTgyMzMyMDkyNDY2.Yja9zg.uDyOdxelGZBJZEVPZaAdcxzz1ss"
-client.run(token)
+
+client.run(auth.token)
