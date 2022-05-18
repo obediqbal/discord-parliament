@@ -1,5 +1,6 @@
-from utils import client
-from utils import has_voter_role
+from src import client
+from data.member import Member
+from data.voter import Voter
 
 guilds = {}
 
@@ -24,20 +25,12 @@ def get_member(guild, author):
     return instance
 
 
-class Member():
-    def __init__(self, guild, user):
-        self.guild = guild
-        self.user = user
-        self.is_voter = False
+def has_role(user, target):
+    for role in user.roles:
+        if role.name==target:
+            return True
+    return False
 
 
-    def update_data(self):
-        self.guild = client.get_guild(self.guild.id)
-        self.user = self.guild.get_member(self.user.id)
-
-
-class Voter(Member):
-    def __init__(self, guild, user, last_active):
-        super().__init__(guild, user)
-        self.last_active = last_active
-        self.is_voter = True
+def has_voter_role(user):
+    return has_role(user, 'Voter')
